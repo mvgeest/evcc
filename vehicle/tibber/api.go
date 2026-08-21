@@ -132,8 +132,10 @@ const (
 	idConnector = "connector.status"            // connected/disconnected/unknown
 	idCharging  = "charging.status"             // charging/idle/unknown
 
-	StatusConnected = "connected" // connector.status
-	StatusCharging  = "charging"  // charging.status
+	StatusConnected    = "connected"    // connector.status
+	StatusDisconnected = "disconnected" // connector.status
+	StatusCharging     = "charging"     // charging.status
+	StatusIdle         = "idle"         // charging.status: connected but not actively charging
 )
 
 const kmPerMile = 1.609344

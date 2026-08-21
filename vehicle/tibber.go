@@ -125,16 +125,29 @@ func (v *Tibber) Status() (api.ChargeStatus, error) {
 		return api.StatusNone, err
 	}
 
-	status := api.StatusA // disconnected
-
-	if plug, ok := res.PlugStatus(); ok && plug == tibber.StatusConnected {
-		status = api.StatusB // connected, not charging
-	}
+	// Charging is the most specific signal: check it first.
 	if charging, ok := res.ChargingStatus(); ok && charging == tibber.StatusCharging {
-		status = api.StatusC // charging
+		return api.StatusC, nil // charging
 	}
 
-	return status, nil
+	// Explicit connector status takes precedence over the charging-idle fallback.
+	if plug, ok := res.PlugStatus(); ok {
+		switch plug {
+		case tibber.StatusConnected:
+			return api.StatusB, nil // connected, not charging
+		case tibber.StatusDisconnected:
+			return api.StatusA, nil // disconnected
+		}
+	}
+
+	// Some OEMs report connector.status as "unknown" even when plugged in.
+	// Fall back to charging.status: "idle" means the vehicle is connected
+	// to a charge point but not actively drawing power.
+	if charging, ok := res.ChargingStatus(); ok && charging == tibber.StatusIdle {
+		return api.StatusB, nil // connected, not charging
+	}
+
+	return api.StatusA, nil // unknown or disconnected
 }
 
 var _ api.SocLimiter = (*Tibber)(nil)
