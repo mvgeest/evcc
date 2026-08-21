@@ -1,0 +1,29 @@
+template: cupra-direct
+products:
+  - brand: Cupra
+    description:
+      generic: MyCupra (direct)
+  - brand: Seat
+    description:
+      generic: MySeats (direct)
+requirements:
+  description:
+    de: |
+      Direkte Verbindung zur MyCupra-API über den VW-Konzern-Backend (CARIAD).
+      Die Anmeldung erfolgt einmalig im Browser über einen Bestätigungscode
+      (Device Authorization Grant, RFC 8628) — kein Passwort in evcc gespeichert.
+    en: |
+      Direct connection to the MyCupra API via the VW Group backend (CARIAD).
+      Login is done once in a browser via a confirmation code
+      (Device Authorization Grant, RFC 8628) — no password stored in evcc.
+auth:
+  type: cupra
+params:
+  - preset: vehicle-base
+  - name: vin
+    example: VSSZZZK1...
+  - preset: vehicle-online
+render: |
+  type: cupra
+  {{ include "base" . }}
+  {{ include "features" . }}
