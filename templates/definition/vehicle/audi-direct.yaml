@@ -1,0 +1,32 @@
+template: audi-direct
+products:
+  - brand: Audi
+    description:
+      generic: myAudi (direct)
+requirements:
+  description:
+    de: |
+      Nutzt die myAudi-API direkt über den WeConnect-Dienst von CARIAD. Beim ersten
+      Start zeigt evcc einen Code und eine URL an — einmalig im Browser bestätigen.
+      Danach läuft alles automatisch. Echtzeit-Daten ohne Verzögerung.
+    en: |
+      Uses the myAudi API directly via CARIAD's WeConnect service. On first use evcc
+      displays a code and a URL — confirm once in a browser. Subsequent starts run
+      fully headless. Real-time data without delay.
+params:
+  - preset: vehicle-base
+  - name: vin
+    example: WAUZZZ...
+  - name: coarsecurrent
+    advanced: true
+    deprecated: true
+  - name: welcomecharge
+    advanced: true
+    deprecated: true
+  - preset: vehicle-online
+auth:
+  type: audi
+render: |
+  type: audi
+  {{ include "base" . }}
+  {{ include "features" . }}
